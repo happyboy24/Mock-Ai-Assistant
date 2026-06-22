@@ -1,0 +1,154 @@
+.list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.empty {
+  color: var(--text-secondary);
+  font-size: 14px;
+  text-align: center;
+  margin-top: 40px;
+}
+
+.msg {
+  display: flex;
+  gap: 10px;
+  animation: fadein 0.2s ease;
+}
+
+@keyframes fadein {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.user {
+  flex-direction: row-reverse;
+}
+
+.avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 600;
+  flex-shrink: 0;
+  letter-spacing: 0.02em;
+}
+
+.avatarAi {
+  background: var(--accent-light);
+  color: var(--accent);
+}
+
+.avatarUser {
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  border: 0.5px solid var(--border-medium);
+}
+
+.bubble {
+  max-width: 82%;
+  padding: 10px 14px;
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.bubbleAi {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border-radius: 4px 14px 14px 14px;
+  border: 0.5px solid var(--border-subtle);
+}
+
+.bubbleUser {
+  background: var(--accent-light);
+  color: var(--text-info);
+  border-radius: 14px 4px 14px 14px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* Markdown inside AI bubble */
+.bubbleAi :global(p) {
+  margin-bottom: 0.5em;
+}
+.bubbleAi :global(p:last-child) {
+  margin-bottom: 0;
+}
+.bubbleAi :global(h1),
+.bubbleAi :global(h2),
+.bubbleAi :global(h3) {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0.75em 0 0.25em;
+}
+.bubbleAi :global(pre) {
+  background: var(--bg-primary);
+  border: 0.5px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin: 8px 0;
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  line-height: 1.55;
+}
+.bubbleAi :global(code) {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  background: var(--bg-primary);
+  padding: 1px 5px;
+  border-radius: 4px;
+  border: 0.5px solid var(--border-subtle);
+}
+.bubbleAi :global(pre code) {
+  background: none;
+  border: none;
+  padding: 0;
+}
+.bubbleAi :global(ul),
+.bubbleAi :global(ol) {
+  padding-left: 20px;
+  margin: 6px 0;
+}
+.bubbleAi :global(li) {
+  margin-bottom: 3px;
+}
+.bubbleAi :global(strong) {
+  font-weight: 600;
+}
+.bubbleAi :global(a) {
+  color: var(--accent);
+  text-decoration: none;
+}
+.bubbleAi :global(a:hover) {
+  text-decoration: underline;
+}
+
+/* Typing indicator */
+.typing {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+.typing span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--text-secondary);
+  animation: bounce 1.2s infinite;
+}
+.typing span:nth-child(2) { animation-delay: 0.2s; }
+.typing span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes bounce {
+  0%, 60%, 100% { transform: translateY(0); }
+  30%           { transform: translateY(-5px); }
+}

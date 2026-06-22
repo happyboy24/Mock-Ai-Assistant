@@ -1,0 +1,171 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+  --bg-primary: #ffffff;
+  --bg-secondary: #f5f5f4;
+  --bg-tertiary: #eeece8;
+  --bg-info: #e6f1fb;
+
+  --text-primary: #1a1a1a;
+  --text-secondary: #6b6b6b;
+  --text-info: #185fa5;
+
+  --border-subtle: rgba(0, 0, 0, 0.1);
+  --border-medium: rgba(0, 0, 0, 0.18);
+
+  --accent: #185fa5;
+  --accent-light: #e6f1fb;
+  --green: #1D9E75;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-primary: #1c1c1c;
+    --bg-secondary: #252525;
+    --bg-tertiary: #2e2e2e;
+    --bg-info: #0c2a42;
+
+    --text-primary: #f0f0f0;
+    --text-secondary: #9a9a9a;
+    --text-info: #85b7eb;
+
+    --border-subtle: rgba(255,255,255,0.08);
+    --border-medium: rgba(255,255,255,0.14);
+
+    --accent: #85b7eb;
+    --accent-light: #0c2a42;
+  }
+}
+
+html, body, #root {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-medium);
+  border-radius: 3px;
+}
+
+/* ── Code blocks ─────────────────────────────────────────── */
+.code-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 12px;
+  background: #e8eaed;
+  border-bottom: 1px solid #d0d5dd;
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+}
+
+.code-lang {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  color: #555;
+  text-transform: lowercase;
+  letter-spacing: 0.02em;
+}
+
+.code-copy-btn {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 500;
+  color: #666;
+  background: transparent;
+  border: 0.5px solid #ccc;
+  border-radius: 4px;
+  padding: 2px 8px;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+  line-height: 1.6;
+}
+
+.code-copy-btn:hover {
+  color: #222;
+  border-color: #999;
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.code-copy-btn--copied {
+  color: #1D9E75;
+  border-color: #1D9E75;
+  background: rgba(29, 158, 117, 0.06);
+}
+
+pre {
+  border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.6;
+  margin: 0 0 4px;
+}
+
+pre:first-child {
+  border-radius: var(--radius-sm);
+}
+
+.hljs {
+  padding: 14px 16px;
+}
+
+.inline-code {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  background: var(--bg-tertiary);
+  border: 0.5px solid var(--border-subtle);
+  border-radius: 4px;
+  padding: 1px 5px;
+  color: var(--text-primary);
+}
+
+/* ── Dark-mode overrides for highlight.js (github theme) ── */
+@media (prefers-color-scheme: dark) {
+  .code-header {
+    background: #2a2a2a;
+    border-bottom-color: rgba(255, 255, 255, 0.08);
+  }
+  .code-lang { color: #aaa; }
+
+  .hljs {
+    background: #1e1e1e;
+    color: #abb2bf;
+  }
+  .hljs-comment, .hljs-quote        { color: #5c6370; font-style: italic; }
+  .hljs-keyword, .hljs-selector-tag { color: #c678dd; }
+  .hljs-string, .hljs-attr          { color: #98c379; }
+  .hljs-number, .hljs-literal       { color: #d19a66; }
+  .hljs-built_in, .hljs-title       { color: #61afef; }
+  .hljs-type, .hljs-class .hljs-title { color: #e5c07b; }
+  .hljs-variable, .hljs-name        { color: #e06c75; }
+  .hljs-function, .hljs-params      { color: #61afef; }
+  .hljs-meta                         { color: #56b6c2; }
+  .hljs-deletion                     { background: #3a1f1f; }
+  .hljs-addition                     { background: #1f3a1f; }
+}

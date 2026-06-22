@@ -1,0 +1,39 @@
+.bar {
+  display: flex;
+  gap: 6px;
+  padding: 8px 16px;
+  border-bottom: 0.5px solid var(--border-subtle);
+  flex-shrink: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.bar::-webkit-scrollbar {
+  display: none;
+}
+
+.btn {
+  font-size: 12px;
+  font-family: var(--font-sans);
+  padding: 4px 12px;
+  border-radius: 20px;
+  border: 0.5px solid var(--border-subtle);
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s;
+}
+
+.btn:hover {
+  color: var(--text-primary);
+  border-color: var(--border-medium);
+  background: var(--bg-secondary);
+}
+
+.btn.active {
+  background: var(--accent-light);
+  color: var(--accent);
+  border-color: transparent;
+  font-weight: 500;
+}
