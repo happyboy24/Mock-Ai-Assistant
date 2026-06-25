@@ -39,7 +39,10 @@ export function MessageList({ messages, isLoading }: MessageListProps) {
       if (!btn) return
 
       const code = btn.dataset.code ?? ''
-      navigator.clipboard.writeText(code).then(() => {
+      const raw = (() => {
+        try { return decodeURIComponent(escape(atob(code))) } catch { return code }
+      })()
+      navigator.clipboard.writeText(raw).then(() => {
         btn.textContent = '✓ Copied'
         btn.classList.add('code-copy-btn--copied')
         setTimeout(() => {
@@ -72,16 +75,16 @@ export function MessageList({ messages, isLoading }: MessageListProps) {
           <div className={`${styles.avatar} ${msg.role === 'user' ? styles.avatarUser : styles.avatarAi}`}>
             {msg.role === 'user' ? 'You' : 'AI'}
           </div>
-          <div
-            className={`${styles.bubble} ${msg.role === 'user' ? styles.bubbleUser : styles.bubbleAi}`}
-            dangerouslySetInnerHTML={
-              msg.role === 'assistant'
-                ? { __html: renderMarkdown(msg.content) }
-                : undefined
-            }
-          >
-            {msg.role === 'user' ? msg.content : undefined}
-          </div>
+          {msg.role === 'assistant' ? (
+            <div
+              className={`${styles.bubble} ${styles.bubbleAi}`}
+              dangerouslySetInnerHTML={{ __html: renderMarkdown(msg.content) }}
+            />
+          ) : (
+            <div className={`${styles.bubble} ${styles.bubbleUser}`}>
+              {msg.content}
+            </div>
+          )}
         </div>
       ))}
 

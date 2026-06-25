@@ -1,8 +1,12 @@
 import { useState, useCallback } from 'react'
+import Anthropic from '@anthropic-ai/sdk'
 import type { Message, Mode } from '../types'
 import { MODES } from '../modes'
 
-const API_KEY = import.meta.env.VITE_ANTHROPIC_API_KEY as string
+const client = new Anthropic({
+  apiKey: import.meta.env.VITE_ANTHROPIC_API_KEY as string,
+  defaultHeaders: { 'anthropic-dangerous-direct-browser-access': 'true' },
+})
 
 export interface TokenUsage {
   inputTokens: number
@@ -40,52 +44,37 @@ export function useChat(): UseChatReturn {
     setIsLoading(true)
 
     const history = [...messages, userMsg].map(m => ({
-      role: m.role,
+      role: m.role as 'user' | 'assistant',
       content: m.content,
     }))
 
     try {
-      const res = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': API_KEY,
-          'anthropic-version': '2023-06-01',
-          'anthropic-dangerous-direct-browser-access': 'true',
-        },
-        body: JSON.stringify({
-          model: 'claude-sonnet-4-6',
-          max_tokens: 2048,
-          system: MODES[mode].system,
-          messages: history,
-        }),
+      const response = await client.messages.create({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 2048,
+        system: MODES[mode].system,
+        messages: history,
       })
 
-      if (!res.ok) {
-        const err = await res.json()
-        throw new Error(err?.error?.message || `API error ${res.status}`)
-      }
-
-      const data = await res.json()
       const reply =
-        data.content?.find((b: { type: string }) => b.type === 'text')?.text ??
-        'No response received.'
+        response.content.find(b => b.type === 'text')?.text ?? 'No response received.'
 
-      if (data.usage) {
+      if (response.usage) {
         setTokenUsage({
-          inputTokens: data.usage.input_tokens ?? 0,
-          outputTokens: data.usage.output_tokens ?? 0,
+          inputTokens: response.usage.input_tokens,
+          outputTokens: response.usage.output_tokens,
         })
       }
 
-      const assistantMsg: Message = {
-        id: crypto.randomUUID(),
-        role: 'assistant',
-        content: reply,
-        timestamp: new Date(),
-      }
-
-      setMessages(prev => [...prev, assistantMsg])
+      setMessages(prev => [
+        ...prev,
+        {
+          id: crypto.randomUUID(),
+          role: 'assistant',
+          content: reply,
+          timestamp: new Date(),
+        },
+      ])
     } catch (err) {
       const msg = err instanceof Error ? err.message : 'Unknown error'
       setError(msg)
@@ -100,9 +89,7 @@ export function useChat(): UseChatReturn {
     setTokenUsage(null)
   }, [])
 
-  const clearError = useCallback(() => {
-    setError(null)
-  }, [])
+  const clearError = useCallback(() => setError(null), [])
 
   return { messages, isLoading, error, tokenUsage, send, clear, clearError }
 }

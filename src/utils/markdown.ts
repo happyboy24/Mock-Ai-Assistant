@@ -75,11 +75,8 @@ export function renderMarkdown(text: string): string {
     const raw = code.trim()
     const highlighted = highlightCode(langLabel.toLowerCase(), raw)
     // Encode raw code safely for an HTML attribute (no backtick or NUL issues)
-    const attrCode = raw
-      .replace(/&/g, '&amp;')
-      .replace(/"/g, '&quot;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
+    // Use base64 so the clipboard handler can recover the exact original text
+    const attrCode = btoa(unescape(encodeURIComponent(raw)))
     const langSpan = langLabel
       ? `<span class="code-lang">${escapeHtml(langLabel)}</span>`
       : '<span class="code-lang"></span>'
@@ -132,11 +129,14 @@ export function renderMarkdown(text: string): string {
   let inBlock = false
 
   for (const line of lines) {
-    const isBlock = /^<(pre|ul|ol|h[1-6]|li|div)/.test(line.trim())
-    if (isBlock) {
+    const trimmed = line.trim()
+    const startsBlock = /^<(pre|ul|ol|h[1-6]|li|div)/.test(trimmed)
+    const endsBlock = /<\/(pre|ul|ol|h[1-6]|li|div)>$/.test(trimmed)
+    if (startsBlock) {
       inBlock = true
       result.push(line)
-    } else if (line.trim() === '') {
+      if (endsBlock) inBlock = false
+    } else if (trimmed === '') {
       inBlock = false
       result.push('')
     } else {
